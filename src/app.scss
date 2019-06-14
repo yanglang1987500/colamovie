@@ -1,0 +1,208 @@
+
+@import "~taro-ui/dist/style/components/tabs.scss";
+@import "~taro-ui/dist/style/components/flex.scss";
+@import "~taro-ui/dist/style/components/activity-indicator.scss";
+@import '~taro-ui/dist/style/components/loading.scss';
+@import "~taro-ui/dist/style/components/grid.scss";
+@import "~taro-ui/dist/style/components/icon.scss";
+@import "~taro-ui/dist/style/components/input.scss";
+@import "~taro-ui/dist/style/components/card.scss";
+@import "~taro-ui/dist/style/components/tag.scss";
+
+
+.album-pic {
+  padding: 5px 8px 30px 8px;
+  text-align: center;
+  overflow: hidden;
+  
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color:#eee;
+  >image {
+    height: 300px;
+    width: auto;
+    display: block;
+    background: #1F1F1F;
+    box-shadow: 0 0 15px rgba(0,0,0, .9);
+  }
+  >label {
+    font-size: 24px;
+    color: #eee;
+  }
+}
+
+.album-container {
+  padding-top: 30px;
+}
+
+.at-tabs__header {
+  background: #21353D;
+}
+
+.at-tabs__underline {
+  background-color: #21353D;
+}
+
+.page {
+  background-color: #21353D;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.choose-list {
+  margin: 30px !important;
+  .choose-item {
+    text-align: center;
+    margin: 8px 5px;
+    padding: 5px 0;
+    font-size: 30px;
+    border-radius: 15px;
+    border: 1px solid #1B2C30;
+    background: #333;
+    color: #595959;
+    &.choosen {
+      color: #fff;
+      background: #232323;
+    }
+  }
+}
+
+.video-desc {
+  font-size: 26px;
+  color:#eee;
+  margin: 10px 30px;
+  image {
+    width: 150px;
+    height: 200px;
+    border-radius: 6px;
+    box-shadow: 0 0 20px rgba(0,0,0,.5);
+  }
+}
+
+.video-search-icon {
+  position: absolute;
+  top: 30px;
+  right: 20px;
+  color:#fff;
+  font-size: 40px;
+}
+
+input {
+  border:1rpx solid #23465A;
+  background:#172E3C;
+  border-radius:20rpx;
+  color:#fff;
+  padding: 0 20px;
+}
+.at-input {
+  background: transparent;
+  padding:0;
+  margin:0;
+  input {
+    color: #eee;
+    padding: 20px 20px;
+  }
+  &::after {
+    display: none;
+  }
+}
+.form-item {
+  height: 90px;
+}
+.search-card {
+  border-color: #172E3C;
+  position: relative;
+  .at-card__content {
+    padding:0;
+    background-color: #172E3C;
+  }
+  .at-card__header {
+    display: none;
+  }
+  .video-desc {
+    margin: 0;
+    .album-content {
+      font-size: 20px;
+      margin-top: 10px;
+    }
+  }
+  .video-msg {
+    position: absolute;
+    top: 20px;
+    left: 180px;
+    right: 10px;
+    color:#eee;
+  }
+  margin-bottom: 40px;
+}
+
+.line-limit {
+  overflow : hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.link-group {
+  color: #B3E7FF;
+  cursor: pointer;
+  font-size: 24px;
+  margin: 10px 20px;
+  overflow: hidden;
+  .link-group-item {
+    margin-right: 20px;
+  }
+}
+
+.fl {
+  float: left;
+}
+
+.choose-list {
+  overflow: hidden;
+  height: 70px;
+  &.expand {
+    overflow: auto;
+    height: auto;
+  }
+}
+
+.search-suggestion {
+  padding: 40px;
+  color: #eee;
+  font-size: 28px;
+  .search-type {
+    margin-top: 40px;
+    margin-bottom: 20px;
+  }
+  .at-tag {
+    margin: 0 10px 20px 0;
+    background: #eee;
+  }
+}
+
+.search-clear {
+  position:absolute;
+  right:20px;
+  top:20px;
+  z-index:9999;
+  color:#999;
+  width:40px;
+  height:40px;
+  background:transparent;
+  padding:20px;
+  .at-icon {
+    vertical-align:top;
+  }
+
+}
+
+.globalmask {
+  position: fixed;
+  left:0;
+  bottom:0;
+  top:0;
+  right:0;
+  background: rgba(0,0,0,.4);
+}

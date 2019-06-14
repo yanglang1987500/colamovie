@@ -1,0 +1,20 @@
+{
+	"miniprogramRoot": "dist/",
+	"projectname": "colamovie",
+	"description": "trace video",
+	"appid": "wxee0550c88b431a68",
+	"setting": {
+		"urlCheck": false,
+		"es6": false,
+		"postcss": false,
+		"minified": false,
+		"newFeature": true,
+		"autoAudits": false,
+		"checkInvalidKey": true
+	},
+	"compileType": "miniprogram",
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
+	"libVersion": "2.2.3",
+	"condition": {}
+}
