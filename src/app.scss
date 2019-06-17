@@ -8,8 +8,8 @@
 @import "~taro-ui/dist/style/components/input.scss";
 @import "~taro-ui/dist/style/components/card.scss";
 @import "~taro-ui/dist/style/components/tag.scss";
-
-
+@import "~taro-ui/dist/style/components/fab.scss";
+@import "~taro-ui/dist/style/components/tab-bar.scss";
 .album-pic {
   padding: 5px 8px 30px 8px;
   text-align: center;
@@ -61,19 +61,23 @@
 .page {
   background-color: #21353D;
   min-height: 100vh;
+  padding-bottom: 100px;
   overflow-x: hidden;
 }
 
 .choose-list {
   margin: 30px !important;
+  width:auto;
   .choose-item {
     text-align: center;
     margin: 8px 5px;
-    padding: 5px 0;
-    font-size: 30px;
+    padding: 5px 15px;
+    font-size: 24px;
+    min-width: 60px;
     border-radius: 15px;
     border: 1px solid #1B2C30;
     background: #333;
+    line-height: 2;
     color: #595959;
     &.choosen {
       color: #fff;
@@ -95,11 +99,19 @@
 }
 
 .video-search-icon {
-  position: absolute;
-  top: 30px;
-  right: 20px;
+  position: fixed;
+  bottom: 140px;
+  right: 50px;
   color:#fff;
-  font-size: 40px;
+  font-size: 50px;
+  padding:30rpx;
+  background: #699AAD;
+  border-radius: 50%;
+  box-shadow: 5px 5px 30px rgba(0, 0 , 0, .7);
+  &:focus {
+    background: #54879A;
+    box-shadow: 10px 10px 40px rgba(0, 0 , 0, .8);
+  }
 }
 
 input {
@@ -229,4 +241,22 @@ input {
 }
 .at-tabs__header {
   padding-right: 80px;
+}
+
+.bottom-tabbar {
+  height: 100px;
+  background: #2F4A55;
+  color:#fff !important;
+  box-shadow: 0 -5px 20px rgba(0, 0, 0, .5);
+  .at-tab-bar__item {
+    color:#AAAAAA;
+    line-height: 2;
+    font-weight: bold;
+  }
+  .at-tab-bar__item--active {
+    color:#fff;
+  }
+}
+.at-tab-bar::after {
+  display: none;
 }

@@ -1,9 +1,9 @@
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Video, Image } from '@tarojs/components';
 import { observer, inject } from '@tarojs/mobx';
-import { AtActivityIndicator } from 'taro-ui';
+import { AtActivityIndicator, AtTag } from 'taro-ui';
 import { Business, IBusinessProps } from '../business'
-import { throttle } from '../lib';
+import { throttle, getVideoTitle } from '../lib';
 import { BaseEventOrig } from '@tarojs/components/types/common';
 
 const PROGRESS_KEY = 'colaprogress';
@@ -72,6 +72,7 @@ class Play extends Component<IBusinessProps, IPlayStates> {
 
   onNext = () => {
     const { current, videoList } = this.state;
+    this.removeProgressFromHistory();
     if (current < videoList.length - 1) {
       this.setState({ current: current + 1 });
     }
@@ -82,6 +83,13 @@ class Play extends Component<IBusinessProps, IPlayStates> {
     const { album, current } = this.state;
     const progressMap = Taro.getStorageSync(PROGRESS_KEY) || {};
     progressMap[`progress_${album.vod_id}_${current}`] = detail.currentTime;
+    Taro.setStorageSync(PROGRESS_KEY, progressMap);
+  }
+
+  removeProgressFromHistory() {
+    const { album, current } = this.state;
+    const progressMap = Taro.getStorageSync(PROGRESS_KEY) || {};
+    delete progressMap[`progress_${album.vod_id}_${current}`];
     Taro.setStorageSync(PROGRESS_KEY, progressMap);
   }
   
@@ -115,8 +123,14 @@ class Play extends Component<IBusinessProps, IPlayStates> {
         {list.length > 20 && <View className="fl link-group-item" onClick={() => {this.setState({ isAsc: !isAsc })}}>{isAsc ? '倒序' : '顺序'}</View>}
         </View>}
         <View className={`video-desc at-row at-row--wrap choose-list ${expand ? 'expand' : ''}`}>
-        {list.map((video: IVideo) =>
-          (<View key={video.originIndex} onClick={() => this.setState({ current: video.originIndex })} className={`at-col at-col-1 choose-item ${video.originIndex == current && 'choosen'}`}>{video.originIndex+1}</View>))}
+          {list.map((video: IVideo) => (<AtTag
+              key={video.originIndex}
+              circle
+              onClick={() => this.setState({ current: video.originIndex })}
+              className={`choose-item ${video.originIndex == current && 'choosen'}`}
+            >
+            {getVideoTitle(video.title, video.originIndex)}
+          </AtTag>))}
         </View>
         <View className="video-desc">
           <Image mode="aspectFill" src={album.vod_pic}  />

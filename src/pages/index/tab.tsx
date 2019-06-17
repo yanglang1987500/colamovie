@@ -19,13 +19,14 @@ class Tab extends Component<ITabWrapperProps> {
 
   render() {
     const { getAlbumListByType, typeId = 0 } = this.props;
-    const list = getAlbumListByType(typeId).map(album => ({
+    const data = getAlbumListByType(typeId);
+    const list = (data.data).map(album => ({
       id: album.vod_id,
       image: album.vod_pic,
       info: album.vod_continu,
       title: album.vod_name,
     }));
-    return list.length>0 ? <View className='at-row at-row--wrap album-container'>
+    return list.length > 0 ? <View className='at-row at-row--wrap album-container'>
       {list.map(item => <View className='album-pic at-col at-col-4' key={item.id} onClick={() => Taro.navigateTo({
         url: `/pages/play?id=${item.id}`,
       })}>
@@ -35,7 +36,7 @@ class Tab extends Component<ITabWrapperProps> {
           </View>
           <Label>{item.title}</Label>
         </View>)}
-    </View> : <View className='page'>
+    </View> : data.isNoData ? <View>没有数据~</View> : <View className='page'>
     <AtActivityIndicator size={60} color='#fff' mode='center' />
     </View>;
   }

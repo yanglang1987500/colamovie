@@ -101,14 +101,14 @@ class Search extends Component<IBusinessProps, ISearchStates> {
         </AtCard>)}
       </View> : <View className="search-suggestion">
           <View className="search-type">热门搜索：</View>
-          <View>{hots.map(str => <AtTag circle onClick={() => {this.setState({ keyword: str }, this.doSearch)}}>
+          <View>{hots.map(str => <AtTag key={str} circle onClick={() => {this.setState({ keyword: str }, this.doSearch)}}>
               {str}
             </AtTag>)}
           </View>
           <View className="search-type">历史搜索：
             <View onClick={this.clearHistory} style='color:#B3E7FF;font-size:12px;margin-left:20px;float:right;'>清空历史</View>
           </View>
-          <View>{historyKeywords.map(str => <AtTag circle onClick={() => {this.setState({ keyword: str }, this.doSearch)}}>
+          <View>{historyKeywords.map(str => <AtTag key={str} circle onClick={() => {this.setState({ keyword: str }, this.doSearch)}}>
               {str}
             </AtTag>)}
           </View>

@@ -39,3 +39,9 @@ export function throttle(fn: Function, threshold: number = 1500) {
     }
   }
 }
+
+export const getVideoTitle = (title: string, index: number): string => {
+  // let result = title.replace(/\D/gi, '');
+  // return result === '' ? title : result;
+  return title;
+};

@@ -8,8 +8,8 @@ export enum albumType {
   War = 11,
   Terror = 9,
   Japan = 24,
-  ChinaShow = 25,
-  TaiShow = 26
+  ChinaShow = 26,
+  TaiShow = 27
 };
 
 export const albumTypes: IAlbumType[] = [
