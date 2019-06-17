@@ -2,11 +2,21 @@ import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Video, Image } from '@tarojs/components';
 import { observer, inject } from '@tarojs/mobx';
 import { AtActivityIndicator } from 'taro-ui';
-import { Business, IBusinessProps } from '../business';
+import { Business, IBusinessProps } from '../business'
+import { throttle } from '../lib';
+import { BaseEventOrig } from '@tarojs/components/types/common';
+
+const PROGRESS_KEY = 'colaprogress';
 
 @inject(Business)
 @observer
 class Play extends Component<IBusinessProps, IPlayStates> {
+
+  constructor(props: IBusinessProps) {
+    super(props);
+    this.onTimeUpdate = throttle(this.onTimeUpdate.bind(this), 2000);
+  }
+
   static options = {
     addGlobalClass: true
   }
@@ -33,9 +43,10 @@ class Play extends Component<IBusinessProps, IPlayStates> {
   }
 
   componentDidMount () {
-    const { albumList, searchAlbumList } = this.props;
+    const { getAlbumById } = this.props;
     const albumId = this.$router.params.id;
-    const album = albumList.data.concat(searchAlbumList.data).find(album => album.vod_id == albumId);
+    const album = getAlbumById(albumId);
+
     if (!album) return;
     Taro.setNavigationBarTitle({ title: album.vod_name });
     const videoList = album.vod_url.split('$$$')
@@ -59,6 +70,28 @@ class Play extends Component<IBusinessProps, IPlayStates> {
 
   componentWillUnmount () { }
 
+  onNext = () => {
+    const { current, videoList } = this.state;
+    if (current < videoList.length - 1) {
+      this.setState({ current: current + 1 });
+    }
+  }
+
+  onTimeUpdate(e: BaseEventOrig<any>) {
+    const { detail } = e;
+    const { album, current } = this.state;
+    const progressMap = Taro.getStorageSync(PROGRESS_KEY) || {};
+    progressMap[`progress_${album.vod_id}_${current}`] = detail.currentTime;
+    Taro.setStorageSync(PROGRESS_KEY, progressMap);
+  }
+  
+  getProgressFromHistory() {
+    const { album, current } = this.state;
+    const progressMap = Taro.getStorageSync(PROGRESS_KEY) || {};
+    const progress = progressMap[`progress_${album.vod_id}_${current}`];
+    return progress ? progress : 0;
+  }
+
   render () {
     const { videoList, current, album, expand, isAsc } = this.state;
     const list = isAsc ? videoList : [...videoList].reverse();
@@ -67,20 +100,22 @@ class Play extends Component<IBusinessProps, IPlayStates> {
           style='width: 100%;'
           src={list.find(video => video.originIndex === current).url}
           controls={true}
-          autoplay={false}
-          initialTime={0}
+          autoplay={true}
+          initialTime={this.getProgressFromHistory()}
           poster={album.vod_pic}
           id='video'
           loop={false}
           muted={false}
+          onEnded={this.onNext}
+          onTimeUpdate={this.onTimeUpdate}
         />
         <View className="video-desc">集数</View>
-        {list.length > 20 && <View className='link-group'>
-          <View className="fl link-group-item" onClick={() => {this.setState({ expand: !expand })}}>{expand ? '收起' : '展开'}</View>
-          <View className="fl link-group-item" onClick={() => {this.setState({ isAsc: !isAsc })}}>{isAsc ? '倒序' : '顺序'}</View>
+        {list.length > 10 && <View className='link-group'>
+        <View className="fl link-group-item" onClick={() => {this.setState({ expand: !expand })}}>{expand ? '收起' : '展开'}</View>
+        {list.length > 20 && <View className="fl link-group-item" onClick={() => {this.setState({ isAsc: !isAsc })}}>{isAsc ? '倒序' : '顺序'}</View>}
         </View>}
         <View className={`video-desc at-row at-row--wrap choose-list ${expand ? 'expand' : ''}`}>
-        {list.map((video: IVideo, i: number) =>
+        {list.map((video: IVideo) =>
           (<View key={video.originIndex} onClick={() => this.setState({ current: video.originIndex })} className={`at-col at-col-1 choose-item ${video.originIndex == current && 'choosen'}`}>{video.originIndex+1}</View>))}
         </View>
         <View className="video-desc">

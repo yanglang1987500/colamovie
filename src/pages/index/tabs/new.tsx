@@ -3,6 +3,7 @@ import { View, Image, Label } from "@tarojs/components";
 import { AtActivityIndicator } from 'taro-ui';
 import { observer, inject } from '@tarojs/mobx';
 import { Business, IBusinessProps } from '../../../business';
+import { albumType, albumTypes } from '../../../lib/constants';
 
 @inject(Business)
 @observer
@@ -14,12 +15,12 @@ class New extends Component<INewProps, INewStates> {
 
   componentDidMount() {
     const { getVideoList } = this.props;
-    getVideoList();
+    getVideoList({ typeId: albumType.News });
   }
 
   render() {
-    const { albumList } = this.props;
-    const list = albumList.data.map(album => ({
+    const { getAlbumListByType } = this.props;
+    const list = getAlbumListByType(albumType.News).map(album => ({
       id: album.vod_id,
       image: album.vod_pic,
       title: album.vod_name,

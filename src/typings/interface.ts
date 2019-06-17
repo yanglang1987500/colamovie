@@ -4,6 +4,10 @@ interface IQueryParam {
   typeId?: number;
 }
 
+interface IData {
+  [key: number]: IAlbum[];
+}
+
 interface IAlbum {
   vod_id: string;
   vod_cid: string;
@@ -43,4 +47,9 @@ interface IVideo {
   title: string;
   url: string;
   originIndex?: number;
+}
+
+interface IAlbumType {
+  id: number;
+  name: string;
 }

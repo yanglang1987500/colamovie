@@ -1,8 +1,14 @@
-import { observable, action, runInAction } from 'mobx';
+import { observable, action, runInAction, toJS } from 'mobx';
 import { http, Q } from '../lib';
 import LoadingData from "./loadingData";
+import { filterChar, filterSensitive } from '../lib/filter';
+import { albumType, albumTypes } from '../lib/constants';
 
 class Store {
+
+  @observable
+  globalData: LoadingData<IData> =
+    new LoadingData(albumTypes.reduce((prev: IData, current) => { prev[current.id] = []; return prev; }, {}));
 
   @observable
   albumList: LoadingData<IAlbum[]> = new LoadingData([]);
@@ -10,11 +16,28 @@ class Store {
   @observable
   searchAlbumList: LoadingData<IAlbum[]> = new LoadingData([]);
 
+  getAlbumListByType(typeId: number) :IAlbum[] {
+    return this.globalData.data[typeId];
+  }
+
+  getAlbumById(albumId: string) {
+    const data = this.globalData.data;
+    return Object.keys(data)
+      .reduce((prev: [], current: string) => [...prev, ...data[parseInt(current, 10)]], [])
+      .concat(toJS(this.searchAlbumList.data))
+      .find((album: IAlbum) => album.vod_id == albumId);
+  }
+
   @action
   async getVideoList(param?: IQueryParam) {
-    const data = await this.api().getVideoList(param);
+    const result = await this.api().getVideoList(param);
     runInAction(() => {
-      this.albumList.setLoadedData(data.data ? data.data.filter(album => album.vod_name.indexOf('性爱') === -1) : []);
+      let list = result.data;
+      list = filterSensitive(list, (album) => album.vod_name);
+      list = filterChar(list, 'vod_content');
+      const data = this.globalData.data;
+      data[(param && param.typeId) || albumType.News] = list;
+      this.globalData.setLoadedData(data);
     });
   }
 
@@ -23,7 +46,9 @@ class Store {
     const promise = this.api().getVideoList(param);
     const result = await promise;
     runInAction(() => {
-      this.searchAlbumList.setLoadedData(result.data || []);
+      let list = result.data;
+      list = filterChar(list, 'vod_content');
+      this.searchAlbumList.setLoadedData(list);
     });
     return promise;
   }

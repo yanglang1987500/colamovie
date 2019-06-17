@@ -2,7 +2,8 @@ import Taro, { Component, Config } from '@tarojs/taro'
 import { View } from '@tarojs/components';
 import { observer, inject } from '@tarojs/mobx';
 import { AtTabs, AtTabsPane } from 'taro-ui';
-import New from './tabs/new';
+import { albumType, albumTypes } from '../../lib/constants';
+import Tab from './tab';
 
 @observer
 class Index extends Component {
@@ -19,10 +20,21 @@ class Index extends Component {
    */
   config: Config = {
     navigationBarTitleText: '小可乐看电影',
+    enablePullDownRefresh: true,
   }
 
   state = {
     current: 0
+  }
+
+  onPullDownRefresh() {
+    console.log('refresh???');
+    setTimeout(() => {
+      Taro.stopPullDownRefresh();
+    }, 3000);
+  }
+  onReachBottom() {
+    console.log('reach bottom');
   }
 
   componentWillMount () {
@@ -42,12 +54,12 @@ class Index extends Component {
     })
   }
   render () {
-    const tabList = [{ title: '最新' }]
-    return (<View style='background: #21353D;'>
-      <AtTabs  current={this.state.current} tabList={tabList} onClick={this.handleClick.bind(this)}>
-        <AtTabsPane current={this.state.current} index={0} >
-          <New />
-        </AtTabsPane>
+    const tabList = albumTypes.map(type => ({ title: type.name }));
+    return (<View className='page'>
+      <AtTabs scroll current={this.state.current} tabList={tabList} onClick={this.handleClick.bind(this)}>
+        
+          {albumTypes.map((type, index) => <AtTabsPane key={type.id} current={this.state.current} index={index} ><Tab typeId={type.id} /></AtTabsPane>)}
+        
       </AtTabs>
       <View onClick={() => Taro.navigateTo({url: '/pages/search' })} className='at-icon at-icon-search video-search-icon'></View>
     </View>

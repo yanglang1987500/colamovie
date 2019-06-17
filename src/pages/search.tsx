@@ -32,8 +32,7 @@ class Search extends Component<IBusinessProps, ISearchStates> {
 
 
   saveKeywordsToHistory(keyword: string) {
-    const result = Taro.getStorageSync(HISTORY_KEY);
-    const list: any = result || [];
+    const list = Taro.getStorageSync(HISTORY_KEY) || [];
     list.push(keyword);
     const set = new Set(list);
     Taro.setStorageSync(HISTORY_KEY, Array.from(set));
@@ -95,7 +94,7 @@ class Search extends Component<IBusinessProps, ISearchStates> {
             <Image mode="aspectFill" src={album.vod_pic}  />
             <View className="video-msg">
               <View>{album.vod_name}</View>
-              <View>{album.vod_director}</View>
+              <View>{album.vod_continu}</View>
               <View className="line-limit album-content">{album.vod_content}</View>
             </View>
           </View>
