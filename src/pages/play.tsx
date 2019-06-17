@@ -36,7 +36,7 @@ class Play extends Component<IBusinessProps, IPlayStates> {
     expand: false,
     current: 0,
     isAsc: true,
-    videoList: []
+    videoList: [],
   };
 
   componentWillMount () {
@@ -101,8 +101,9 @@ class Play extends Component<IBusinessProps, IPlayStates> {
   }
 
   render () {
-    const { videoList, current, album, expand, isAsc } = this.state;
+    const { videoList, current, album, expand, isAsc, chooseHeight } = this.state;
     const list = isAsc ? videoList : [...videoList].reverse();
+    
     return list.length > 0 ? <View className='page'>
         <Video
           style='width: 100%;'
@@ -118,19 +119,20 @@ class Play extends Component<IBusinessProps, IPlayStates> {
           onTimeUpdate={this.onTimeUpdate}
         />
         <View className="video-desc">集数</View>
-        {list.length > 10 && <View className='link-group'>
+        <View className='link-group'>
         <View className="fl link-group-item" onClick={() => {this.setState({ expand: !expand })}}>{expand ? '收起' : '展开'}</View>
-        {list.length > 20 && <View className="fl link-group-item" onClick={() => {this.setState({ isAsc: !isAsc })}}>{isAsc ? '倒序' : '顺序'}</View>}
-        </View>}
+        <View className="fl link-group-item" onClick={() => {this.setState({ isAsc: !isAsc })}}>{isAsc ? '倒序' : '顺序'}</View>
+        </View>
         <View className={`video-desc at-row at-row--wrap choose-list ${expand ? 'expand' : ''}`}>
-          {list.map((video: IVideo) => (<AtTag
-              key={video.originIndex}
-              circle
-              onClick={() => this.setState({ current: video.originIndex })}
-              className={`choose-item ${video.originIndex == current && 'choosen'}`}
-            >
-            {getVideoTitle(video.title, video.originIndex)}
-          </AtTag>))}
+          <View className="choose-list-wrap">{list.map((video: IVideo) => (<AtTag
+                key={video.originIndex}
+                circle
+                onClick={() => this.setState({ current: video.originIndex })}
+                className={`choose-item ${video.originIndex == current && 'choosen'}`}
+              >
+              {getVideoTitle(video.title, video.originIndex)}
+            </AtTag>))}
+          </View>
         </View>
         <View className="video-desc">
           <Image mode="aspectFill" src={album.vod_pic}  />

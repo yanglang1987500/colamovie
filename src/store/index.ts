@@ -7,10 +7,15 @@ import { albumType, albumTypes } from '../lib/constants';
 const emptyData = new LoadingData<IAlbum[]>([]);
 class Store {
 
+  constructor() {
+    this.globalData = new Map<number, LoadingData<IAlbum[]>>();
+    Array(100).fill(1).forEach((i, index) => {
+      this.globalData.set(index, new LoadingData<IAlbum[]>([]));
+    })
+  }
+
   @observable
-  globalData: LoadingData<Map<number, LoadingData<IAlbum[]>>> =
-    new LoadingData(Array(100).fill(1)
-      .reduce((map, v, currentIndex) => (map[currentIndex] = new LoadingData<IAlbum[]>([])), new Map()));
+  globalData: Map<number, LoadingData<IAlbum[]>>;
 
   @observable
   albumList: LoadingData<IAlbum[]> = new LoadingData([]);
@@ -22,28 +27,34 @@ class Store {
   typeList: LoadingData<IType[]> = new LoadingData([]);
 
   getAlbumListByType(typeId: number) :LoadingData<IAlbum[]> {
-    return this.globalData.data.get(typeId);
+    return this.globalData.get(typeId);
   }
 
   getAlbumById(albumId: string) {
-    const data = this.globalData.data;
-    return Object.keys(data)
-      .reduce((prev: [], current: string) => [...prev, ...data.get(parseInt(current, 10)).data], [])
+    const array = [];
+    for (let key of this.globalData.keys()) {
+      array.push(key);
+    }
+    return array.
+      reduce((prev: [], current: number) => [...prev, ...this.globalData.get(current).data], [])
       .concat(toJS(this.searchAlbumList.data))
       .find((album: IAlbum) => album.vod_id == albumId);
   }
 
   @action
   async getVideoList(param?: IQueryParam) {
+    const typeId = (param && param.typeId) || albumType.News;
+    if (this.globalData.get(typeId).data.length > 0) {
+      return;
+    }
     const result = await this.api().getVideoList(param);
     runInAction(() => {
       let list = result.data;
       this.setTypeList(result.list);
       list = filterSensitive(list, (album) => album.vod_name);
       list = filterChar(list, 'vod_content');
-      const data = this.globalData.data;
-      data.set((param && param.typeId) || albumType.News, new LoadingData(list));
-      this.globalData.setLoadedData(data);
+      const typeId = (param && param.typeId) || albumType.News;
+      this.globalData.get(parseInt(`${typeId}`, 10)).setLoadedData(list);
     });
   }
 
@@ -73,7 +84,7 @@ class Store {
           param.pageIndex && (searchParam.p = param.pageIndex);
           param.typeId && (searchParam.cid = param.typeId);
         }
-        return Q(http.get('https://wx.yaoleyaotou.xin/inc/feifei3.4', searchParam));
+        return Q(http.get('https://wx.yaoleyaotou.xin/inc/feifei3.4/', searchParam));
       },
     };
   }

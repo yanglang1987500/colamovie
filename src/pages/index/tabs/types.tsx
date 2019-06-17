@@ -15,9 +15,9 @@ class Types extends Component<ITypeWrapperProps> {
   render() {
     const { typeList } = this.props;
     const list = typeList.data;
-    return <View className='at-row at-row--wrap album-container'>
-      {list.map(item => <View className='album-pic at-col at-col-4' key={item.list_id} onClick={() => Taro.navigateTo({
-        url: `/pages/type?id=${item.list_id}`,
+    return <View className='at-row at-row--wrap types-container'>
+      {list.map(item => <View className='types-metro at-col at-col-4' key={item.list_id} onClick={() => Taro.navigateTo({
+        url: `/pages/type?id=${item.list_id}&name=${item.list_name}`,
       })}>
           <Label>{item.list_name}</Label>
         </View>)}

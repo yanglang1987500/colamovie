@@ -36,7 +36,7 @@ class Tab extends Component<ITabWrapperProps> {
           </View>
           <Label>{item.title}</Label>
         </View>)}
-    </View> : data.isNoData ? <View>没有数据~</View> : <View className='page'>
+    </View> : data.isNoData ? <View className="no-data">没有数据~</View> : <View className='page'>
     <AtActivityIndicator size={60} color='#fff' mode='center' />
     </View>;
   }
