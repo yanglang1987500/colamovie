@@ -4,7 +4,6 @@ import LoadingData from "./loadingData";
 import { filterChar, filterSensitive } from '../lib/filter';
 import { albumType, albumTypes } from '../lib/constants';
 
-const emptyData = new LoadingData<IAlbum[]>([]);
 class Store {
 
   constructor() {
@@ -47,7 +46,7 @@ class Store {
     if (this.globalData.get(typeId).data.length > 0) {
       return;
     }
-    const result = await this.api().getVideoList(param);
+    const result = await this.api().getVideoListMain(param);
     runInAction(() => {
       let list = result.data;
       this.setTypeList(result.list);
@@ -64,28 +63,37 @@ class Store {
   }
 
   @action
-  async fetchVideoList(param?: IQueryParam) {
-    const promise = this.api().getVideoList(param);
-    const result = await promise;
-    runInAction(() => {
-      let list = result.data;
-      list = filterChar(list, 'vod_content');
-      this.searchAlbumList.setLoadedData(list);
+  async searchVideoList(param?: IQueryParam) {
+    return new Promise(async resolve =>  {
+      const promiseMain = this.api().getVideoListMain(param);
+      const promiseSecond = this.api().getVideoListSecond(param);
+      const result = await Promise.all([promiseMain, promiseSecond]);
+      runInAction(() => {
+        let list = [...result[0].data, ...result[1].data];
+        list = filterChar(list, 'vod_content');
+        this.searchAlbumList.setLoadedData(list);
+        resolve(list);
+      });
     });
-    return promise;
   }
 
   api() {
     return {
-      getVideoList: (param?: IQueryParam): Promise<IResult> => {
+      getVideoListMain: (param?: IQueryParam): Promise<IResult> => {
+        return this.api().fetch('https://wx.yaoleyaotou.xin/inc/feifei3.4/', param);
+      },
+      getVideoListSecond: (param?: IQueryParam): Promise<IResult> => {
+        return this.api().fetch('https://wx.yaoleyaotou.xin/inc/feifei3s/', param);
+      },
+      fetch: (url: string, param?: IQueryParam): Promise<IResult> => {
         const searchParam: any = {};
         if (param) {
           param.key && (searchParam.wd = param.key);
           param.pageIndex && (searchParam.p = param.pageIndex);
           param.typeId && (searchParam.cid = param.typeId);
         }
-        return Q(http.get('https://wx.yaoleyaotou.xin/inc/feifei3.4/', searchParam));
-      },
+        return Q(http.get(url, searchParam));
+      }
     };
   }
 }
