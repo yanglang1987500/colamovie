@@ -4,7 +4,7 @@ import LoadingData from "./loadingData";
 import { filterChar, filterSensitive } from '../lib/filter';
 import { albumType, albumTypes } from '../lib/constants';
 
-const emptyData = new LoadingData<IAlbum[]>([]);
+const disableType = ['福利片', '伦理片', '连续剧'];
 class Store {
 
   constructor() {
@@ -60,7 +60,7 @@ class Store {
 
   @action
   setTypeList(list: IType[]) {
-    this.typeList.setLoadedData(list);
+    this.typeList.setLoadedData(list.filter(i => !disableType.some(type => type === i.list_name)));
   }
 
   @action
