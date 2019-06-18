@@ -10,7 +10,7 @@ export const Business = (store: Store) => {
   };
   const dispatchConnect = {
     getVideoList: (param?: IQueryParam) => store.getVideoList(param),
-    fetchVideoList: (param?: IQueryParam) => store.fetchVideoList(param),
+    searchVideoList: (param?: IQueryParam) => store.searchVideoList(param),
     getAlbumListByType: (typeId: number) => store.getAlbumListByType(typeId),
     getAlbumById: (albumId: string) => store.getAlbumById(albumId),
   };
@@ -27,7 +27,7 @@ export interface IBusinessProps {
   typeList: LoadingData<IType[]>;
   globalData: LoadingData<Map<number, LoadingData<IAlbum[]>>>;
   getVideoList: (param?: IQueryParam) => Promise<void>;
-  fetchVideoList: (param?: IQueryParam) => Promise<IResult>;
+  searchVideoList: (param?: IQueryParam) => Promise<IAlbum[]>;
   getAlbumListByType: (typeId: number) => LoadingData<IAlbum[]>;
   getAlbumById: (albumId: string) => IAlbum,
 }

@@ -52,14 +52,14 @@ class Search extends Component<IBusinessProps, ISearchStates> {
     if (!keyword) return;
     this.setState({ loading: true });
     
-    const { fetchVideoList } = this.props;
-    const result = await fetchVideoList({ key: keyword });
-    if (result.data.length === 0) {
+    const { searchVideoList } = this.props;
+    const result = await searchVideoList({ key: keyword });
+    if (result.length === 0) {
       Taro.showToast({ title: '没有搜到结果', icon: 'none' });
       this.setState({ loading: false });
       return;
     }
-    this.setState({ albumList: result.data || [], loading: false });
+    this.setState({ albumList: result || [], loading: false });
     setTimeout(() => {
       this.saveKeywordsToHistory(keyword);
     }, 1000);
