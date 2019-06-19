@@ -21,19 +21,10 @@ class Index extends Component {
    */
   config: Config = {
     navigationBarTitleText: '小可乐看电影',
-    enablePullDownRefresh: true,
   }
 
   state = {
     current: 0
-  }
-
-  onPullDownRefresh() {
-    setTimeout(() => {
-      Taro.stopPullDownRefresh();
-    }, 3000);
-  }
-  onReachBottom() {
   }
 
   componentWillMount () {

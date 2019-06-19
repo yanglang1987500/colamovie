@@ -119,6 +119,7 @@ class Play extends Component<IBusinessProps, IPlayStates> {
     
     return list.length > 0 ? <View className='page' style="padding-top: 245px;">
         <Video
+          title={`${album.vod_name} ${videoList.find(v => v.originIndex === current).title}`}
           style='width: 100%;position:fixed;top:0;left:0;'
           src={list.find(video => video.originIndex === current).url}
           controls={true}
