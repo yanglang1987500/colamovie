@@ -27,6 +27,17 @@
       background: #1F1F1F;
       box-shadow: 0 0 15px rgba(0,0,0, .9);
     }
+    .album-pic-action {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right:0;
+      height: 60px;
+      line-height: 2;
+      background:rgba(0,0,0,.8);
+      color:#fff;
+      font-size: 26px;
+    }
     .album-pic-info {
       position: absolute;
       bottom: 0;

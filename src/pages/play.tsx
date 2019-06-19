@@ -4,6 +4,7 @@ import { observer, inject } from '@tarojs/mobx';
 import { AtActivityIndicator, AtTag } from 'taro-ui';
 import { Business, IBusinessProps } from '../business'
 import { throttle, getVideoTitle } from '../lib';
+import { history } from '../lib/history';
 import { BaseEventOrig } from '@tarojs/components/types/common';
 
 const PROGRESS_KEY = 'colaprogress';
@@ -43,8 +44,10 @@ class Play extends Component<IBusinessProps, IPlayStates> {
   }
 
   componentDidMount () {
+    Taro.removeStorageSync(PROGRESS_KEY);
     const { getAlbumById } = this.props;
     const albumId = this.$router.params.id;
+    const index = this.$router.params.index;
     const album = getAlbumById(albumId);
 
     if (!album) return;
@@ -64,6 +67,7 @@ class Play extends Component<IBusinessProps, IPlayStates> {
     .filter(video => video.url.endsWith('m3u8'));
     this.setState({
       album: album,
+      current: index ? parseInt(index, 10) : 0,
       videoList: videoList.map((video, index) => ({ ...video, originIndex: index }))
     });
   }
@@ -80,33 +84,28 @@ class Play extends Component<IBusinessProps, IPlayStates> {
 
   onTimeUpdate(e: BaseEventOrig<any>) {
     const { detail } = e;
-    const { album, current } = this.state;
-    const progressMap = Taro.getStorageSync(PROGRESS_KEY) || {};
-    progressMap[`progress_${album.vod_id}_${current}`] = detail.currentTime;
-    Taro.setStorageSync(PROGRESS_KEY, progressMap);
+    const { album, current, videoList } = this.state;
+    history.updateProgressToHistory(album, current,
+      detail.currentTime, videoList.find(v => v.originIndex === current).title);
   }
 
   removeProgressFromHistory() {
     const { album, current } = this.state;
-    const progressMap = Taro.getStorageSync(PROGRESS_KEY) || {};
-    delete progressMap[`progress_${album.vod_id}_${current}`];
-    Taro.setStorageSync(PROGRESS_KEY, progressMap);
+    history.removeProgressFromHistory(album, current);
   }
   
   getProgressFromHistory() {
     const { album, current } = this.state;
-    const progressMap = Taro.getStorageSync(PROGRESS_KEY) || {};
-    const progress = progressMap[`progress_${album.vod_id}_${current}`];
-    return progress ? progress : 0;
+    return history.getProgressFromHistory(album, current);
   }
 
   render () {
-    const { videoList, current, album, expand, isAsc, chooseHeight } = this.state;
+    const { videoList, current, album, expand, isAsc } = this.state;
     const list = isAsc ? videoList : [...videoList].reverse();
     
-    return list.length > 0 ? <View className='page'>
+    return list.length > 0 ? <View className='page' style="padding-top: 245px;">
         <Video
-          style='width: 100%;'
+          style='width: 100%;position:fixed;top:0;left:0;'
           src={list.find(video => video.originIndex === current).url}
           controls={true}
           autoplay={true}

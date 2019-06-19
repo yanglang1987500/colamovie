@@ -53,3 +53,16 @@ interface IAlbumType {
   id: number;
   name: string;
 }
+
+interface IProgresHistory {
+  [key: string]: IProgress;
+}
+
+interface IProgress {
+  vod_id: string;
+  vod_name: string;
+  vod_pic: string;
+  index: number;
+  time: number;
+  title?: string;
+}

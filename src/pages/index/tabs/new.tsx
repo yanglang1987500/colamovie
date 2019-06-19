@@ -11,6 +11,10 @@ class New extends Component {
     addGlobalClass: true
   }
 
+  componentDidMount() {
+    Taro.setNavigationBarTitle({ title: '小可乐看电影' });
+  }
+  
   render() {
     return <View>
       <Tab typeId={albumType.News} />

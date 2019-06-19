@@ -12,6 +12,10 @@ class Types extends Component<ITypeWrapperProps> {
     addGlobalClass: true
   }
 
+  componentDidMount() {
+    Taro.setNavigationBarTitle({ title: '影片分类' });
+  }
+
   render() {
     const { typeList } = this.props;
     const list = typeList.data;
