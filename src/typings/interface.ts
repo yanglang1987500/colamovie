@@ -2,6 +2,7 @@ interface IQueryParam {
   key?: string;
   pageIndex?: number;
   typeId?: number;
+  vodids?: string;
 }
 
 interface IData {
@@ -65,4 +66,11 @@ interface IProgress {
   index: number;
   time: number;
   title?: string;
+  update_time: number;
+}
+
+interface IAlbumHistory {
+  vod_name: string;
+  update_time: number;
+  vods: IProgress[];
 }

@@ -15,14 +15,16 @@ export const history = {
     if (progress) {
       progress.time = time;
       progress.title = title;
+      progress.update_time = new Date().getTime()
     } else {
       progress = {
         vod_id: album.vod_id,
-        vod_name: album.vod_name,
+        vod_name: encodeURIComponent(album.vod_name),
         vod_pic: album.vod_pic,
         index,
         time,
-        title,
+        title: encodeURIComponent(title),
+        update_time: new Date().getTime(),
       };
     }
     progressMap[`${PROGRESS_PREFIX}_${album.vod_id}_${index}`] = progress;

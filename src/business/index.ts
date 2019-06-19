@@ -13,6 +13,8 @@ export const Business = (store: Store) => {
     searchVideoList: (param?: IQueryParam) => store.searchVideoList(param),
     getAlbumListByType: (typeId: number) => store.getAlbumListByType(typeId),
     getAlbumById: (albumId: string) => store.getAlbumById(albumId),
+    getVideoByVodIdAndVodName: (vod_id: string,  vod_name: string) =>
+      store.getVideoByVodIdAndVodName(vod_id, vod_name),
   };
 
   return {
@@ -30,4 +32,5 @@ export interface IBusinessProps {
   searchVideoList: (param?: IQueryParam) => Promise<IAlbum[]>;
   getAlbumListByType: (typeId: number) => LoadingData<IAlbum[]>;
   getAlbumById: (albumId: string) => IAlbum,
+  getVideoByVodIdAndVodName: (vod_id: string, vod_name: string) => Promise<IAlbum>;
 }

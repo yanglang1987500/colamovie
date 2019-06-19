@@ -59,12 +59,20 @@ class Store {
   }
 
   @action
+  async getVideoByVodIdAndVodName(vod_id: string, vod_name: string): Promise<IAlbum> {
+    return new Promise(async resolve =>  {
+      const result = await this.searchVideoList({ vodids: vod_id });
+      resolve(result.find(i => (i.vod_id === vod_id && i.vod_name === vod_name)));
+    });
+  }
+
+  @action
   setTypeList(list: IType[]) {
     this.typeList.setLoadedData(list.filter(i => !disableType.some(type => type === i.list_name)));
   }
 
   @action
-  async searchVideoList(param?: IQueryParam) {
+  async searchVideoList(param?: IQueryParam): Promise<IAlbum[]> {
     return new Promise(async resolve =>  {
       const promiseMain = this.api().getVideoListMain(param);
       const promiseSecond = this.api().getVideoListSecond(param);
@@ -79,7 +87,7 @@ class Store {
   }
 
   api() {
-    return {
+    return {      
       getVideoListMain: (param?: IQueryParam): Promise<IResult> => {
         return this.api().fetch('https://wx.yaoleyaotou.xin/inc/feifei3.4/', param);
       },
@@ -92,6 +100,7 @@ class Store {
           param.key && (searchParam.wd = param.key);
           param.pageIndex && (searchParam.p = param.pageIndex);
           param.typeId && (searchParam.cid = param.typeId);
+          param.vodids && (searchParam.vodids = param.vodids);
         }
         return Q(http.get(url, searchParam));
       }

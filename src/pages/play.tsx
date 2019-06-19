@@ -45,14 +45,35 @@ class Play extends Component<IBusinessProps, IPlayStates> {
 
   componentDidMount () {
     Taro.removeStorageSync(PROGRESS_KEY);
-    const { getAlbumById } = this.props;
+    const { getAlbumById, getVideoByVodIdAndVodName } = this.props;
     const albumId = this.$router.params.id;
-    const index = this.$router.params.index;
+    const albumName = this.$router.params.vod_name;
     const album = getAlbumById(albumId);
 
-    if (!album) return;
+    if (!album) {
+      getVideoByVodIdAndVodName(albumId, albumName).then(album => {
+        this.dealWithAlbumAndIndex(album);
+      });
+      return;
+    };
+    this.dealWithAlbumAndIndex(album);
+  }
+
+  componentWillUnmount () { }
+
+  dealWithAlbumAndIndex(album: IAlbum) {
+    const index = this.$router.params.index;
     Taro.setNavigationBarTitle({ title: album.vod_name });
-    const videoList = album.vod_url.split('$$$')
+    const videoList = this.extractVideoListFromAlbum(album);
+    this.setState({
+      album: album,
+      current: index ? parseInt(index, 10) : 0,
+      videoList: videoList.map((video, index) => ({ ...video, originIndex: index }))
+    });
+  }
+
+  extractVideoListFromAlbum(album: IAlbum) {
+    return album.vod_url.split('$$$')
     .map(i => i.split(/\s+/gi)
       .map(i => {
         let arr = [];
@@ -65,14 +86,7 @@ class Play extends Component<IBusinessProps, IPlayStates> {
       })
     ).reduce((p, c) => { return p.concat(c)}, [])
     .filter(video => video.url.endsWith('m3u8'));
-    this.setState({
-      album: album,
-      current: index ? parseInt(index, 10) : 0,
-      videoList: videoList.map((video, index) => ({ ...video, originIndex: index }))
-    });
   }
-
-  componentWillUnmount () { }
 
   onNext = () => {
     const { current, videoList } = this.state;

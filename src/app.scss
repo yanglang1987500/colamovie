@@ -10,6 +10,13 @@
 @import "~taro-ui/dist/style/components/tag.scss";
 @import "~taro-ui/dist/style/components/fab.scss";
 @import "~taro-ui/dist/style/components/tab-bar.scss";
+.video-history {
+  .album-pic {
+    .album-pic-image>image {
+      height: 240px;
+    }
+  }
+}
 .album-pic {
   padding: 5px 8px 30px 8px;
   text-align: center;
@@ -32,11 +39,16 @@
       top: 0;
       left: 0;
       right:0;
-      height: 60px;
-      line-height: 2;
+      height: 0px;
+      overflow: hidden;
+      line-height: 8;
       background:rgba(0,0,0,.8);
       color:#fff;
       font-size: 26px;
+      transition: linear height .2s;
+      &.show {
+        height: 100%;
+      }
     }
     .album-pic-info {
       position: absolute;
@@ -259,7 +271,7 @@ input {
 }
 
 .bottom-tabbar {
-  height: 90px;
+  height: 100px;
   background: #2F4A55;
   color:#fff !important;
   box-shadow: 0 -5px 15px rgba(0, 0, 0, .3);
@@ -294,4 +306,25 @@ input {
     text-align: center;
     line-height: 5;
   }
+}
+
+.history_album_title {
+  padding:0 20px 0 15px;
+  color:#eee;
+  margin-left: 20px;
+  border-bottom: 2px solid #eee;
+  border-left: 10px solid #eee;
+  display:inline-block;
+}
+
+.history_action_button {
+  position: absolute;
+  right: 20px;
+  top: 14px;
+  font-size: 26px;
+  color:#eee;
+  border: 1px solid #eee;
+  background: #54879A;
+  padding: 5px 20px;
+  border-radius: 10px;
 }
