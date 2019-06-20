@@ -317,13 +317,16 @@ input {
 }
 
 .history_action_button {
-  position: absolute;
+  position: fixed;
   right: 20px;
-  top: 14px;
+  top: 15px;
   font-size: 26px;
   color:#eee;
   border: 1px solid #eee;
   background: #54879A;
-  padding: 5px 20px;
+  padding: 8px 25px;
   border-radius: 10px;
+  &.active {
+    background: #FF2C26;
+  }
 }
