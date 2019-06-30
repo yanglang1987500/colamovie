@@ -17,7 +17,7 @@ export const http = {
 export const Q = <T>(promise: Promise<Taro.request.Promised<any>>): Promise<T> => {
   return new Promise<T>((resolve, reject) => {
     promise
-    .then(response => resolve(response.data))
+    .then(response => response.statusCode === 200 ? resolve(response.data) : reject(response.data))
       .catch(error => {
         console.warn(`Q function error: ${error}`);
         reject(error);

@@ -56,7 +56,7 @@ class Mine extends Component<ITypeWrapperProps, ITypeWrapperStates> {
       }
     }).sort((a, b) => (b.update_time - a.update_time));
     return <View>
-      <View className={`history_action_button ${action === 'edit' ? 'active' : ''}`} onClick={this.toggleAction}>{action === 'read' ? '操作' : '完成'}</View>
+      {result.length > 0 && <View className={`history_action_button ${action === 'edit' ? 'active' : ''}`} onClick={this.toggleAction}>{action === 'read' ? '操作' : '完成'}</View>}
       {result.length > 0 ? result.map((album: IAlbumHistory) => <View>
         <View className='history_album_title'>
           {decodeURIComponent(album.vod_name)}

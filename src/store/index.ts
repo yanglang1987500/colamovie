@@ -76,7 +76,7 @@ class Store {
     return new Promise(async resolve =>  {
       const promiseMain = this.api().getVideoListMain(param);
       const promiseSecond = this.api().getVideoListSecond(param);
-      const result = await Promise.all([promiseMain, promiseSecond]);
+      const result = await Promise.all([promiseMain, promiseSecond].map(p => p.catch(e => ({ data: [] } as IResult))));
       runInAction(() => {
         let list = [...result[0].data, ...result[1].data];
         list = filterChar(list, 'vod_content');
