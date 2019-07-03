@@ -3,7 +3,6 @@ import { View, Image } from '@tarojs/components';
 import { observer, inject } from '@tarojs/mobx';
 import { AtActivityIndicator, AtInput, AtCard, AtTag  } from 'taro-ui';
 import { Business, IBusinessProps } from '../business';
-import { string } from 'prop-types';
 
 const hots = ['神盾局特工', '进击的巨人'];
 const HISTORY_KEY = 'colakeywords';

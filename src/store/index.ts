@@ -3,6 +3,7 @@ import { http, Q } from '../lib';
 import LoadingData from "./loadingData";
 import { filterChar, filterSensitive } from '../lib/filter';
 import { albumType, albumTypes } from '../lib/constants';
+import tvData from './data/tv';
 
 const disableType = ['福利片', '伦理片', '连续剧'];
 class Store {
@@ -26,6 +27,9 @@ class Store {
   @observable
   typeList: LoadingData<IType[]> = new LoadingData([]);
 
+  @observable
+  tvData: ITV[] = tvData;
+  
   getAlbumListByType(typeId: number) :LoadingData<IAlbum[]> {
     return this.globalData.get(typeId);
   }

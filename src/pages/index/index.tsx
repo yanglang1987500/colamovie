@@ -5,6 +5,7 @@ import { AtTabBar } from 'taro-ui';
 import New from './tabs/new';
 import Types from './tabs/types';
 import Mime from './tabs/mime';
+import Tvs from './tabs/tvs';
 
 @observer
 class Index extends Component {
@@ -48,14 +49,16 @@ class Index extends Component {
     return (<View className='page'>
         {current === 0 && <New />}
         {current === 1 && <Types />}
-        {current === 2 && <Mime />}
+        {current === 2 && <Tvs />}
+        {current === 3 && <Mime />}
         <AtTabBar
           fixed
           className="bottom-tabbar"
           tabList={[
             { title: '最新' },
             { title: '分类' },
-            { title: '观看记录', dot: true }
+            { title: '电视' },
+            { title: '记录' }
           ]}
           onClick={this.handleClick.bind(this)}
           current={this.state.current}

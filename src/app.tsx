@@ -25,7 +25,8 @@ class App extends Component {
       'pages/index/index',
       'pages/play',
       'pages/search',
-      'pages/type'
+      'pages/type',
+      'pages/tvplay'
     ],
     window: {
       backgroundTextStyle: 'light',

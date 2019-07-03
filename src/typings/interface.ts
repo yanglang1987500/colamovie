@@ -74,3 +74,8 @@ interface IAlbumHistory {
   update_time: number;
   vods: IProgress[];
 }
+
+interface ITV {
+  title: string;
+  url: string;
+}

@@ -7,6 +7,7 @@ export const Business = (store: Store) => {
     searchAlbumList: store.searchAlbumList,
     globalData: store.globalData,
     typeList: store.typeList,
+    tvData: store.tvData,
   };
   const dispatchConnect = {
     getVideoList: (param?: IQueryParam) => store.getVideoList(param),
@@ -28,6 +29,7 @@ export interface IBusinessProps {
   searchAlbumList: LoadingData<IAlbum[]>;
   typeList: LoadingData<IType[]>;
   globalData: LoadingData<Map<number, LoadingData<IAlbum[]>>>;
+  tvData: ITV[];
   getVideoList: (param?: IQueryParam) => Promise<void>;
   searchVideoList: (param?: IQueryParam) => Promise<IAlbum[]>;
   getAlbumListByType: (typeId: number) => LoadingData<IAlbum[]>;
