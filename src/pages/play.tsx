@@ -121,7 +121,7 @@ class Play extends Component<IBusinessProps, IPlayStates> {
         <Video
           title={`${album.vod_name} ${videoList.find(v => v.originIndex === current).title}`}
           style='width: 100%;position:fixed;top:0;left:0;'
-          src={list.find(video => video.originIndex === current).url}
+          src={list.find(video => video.originIndex === current).url.replace('https://', 'http://')}
           controls={true}
           autoplay={true}
           initialTime={this.getProgressFromHistory()}
